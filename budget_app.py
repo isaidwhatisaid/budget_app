@@ -40,15 +40,3 @@ class Category:
             category.deposit(amount, "Transfer from " + self.name)
             return True
         else: return False
-
-     
-test1 = Category('test1')
-test2 = Category('test2')
-test1.deposit(1.23, 'food')
-test1.deposit(9.54, 'anything else')
-test1.withdraw(4.54, 'minus')
-print(test1.ledger)
-test1.transfer(4.25, test2)
-print(test1.ledger)
-print(test2.ledger)
-
