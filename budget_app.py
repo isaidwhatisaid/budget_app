@@ -6,10 +6,19 @@ class Category:
         self.ledger = []
     
     def __str__(self):
-        print(self.name)
+        # Design the category name row with the stars
+        star_amount = round((30 - len(self.name))/2)
+        self.title_row = '*'*star_amount + self.name + '*'*star_amount
+        if len(self.title_row) == 29:
+            self.title_row += '*'
+        print(self.title_row)
+        # Parse and format each ledger row
         for i in self.ledger:
-            print(i)
-        return "This is what you get"
+            each_row = i['description'] + str(i['amount']).rjust(30-len(i['description']))
+            print(each_row)
+        # Use get_balance method to get the total
+        total = "Total: " + str(self.get_balance())
+        return total
 
     # Deposit method that appends description and amount to the ledger
     def deposit(self, amount, description = ''):
