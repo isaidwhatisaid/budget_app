@@ -1,9 +1,15 @@
 class Category:
 
-    # Constructor method for name of object
+    # Constructor method for name of object and creating object ledger
     def __init__(self, name):
         self.name = name
         self.ledger = []
+    
+    def __str__(self):
+        print(self.name)
+        for i in self.ledger:
+            print(i)
+        return "This is what you get"
 
     # Deposit method that appends description and amount to the ledger
     def deposit(self, amount, description = ''):
