@@ -1,3 +1,5 @@
+import math
+
 class Category:
 
     # Constructor method for name of object and creating object ledger
@@ -72,16 +74,38 @@ test1 = Category('test1')
 test2 = Category('test2')
 test1.deposit(1.10, 'food')
 test1.deposit(93.54, 'anything else this string needs to be really long')
+test2.deposit(200, 'initial')
 test1.withdraw(4.00, 'minus')
-# print(test1.ledger)
+test2.withdraw(15.34, 'withdrawal')
+test2.withdraw(39, 'look')
 test1.transfer(4.25, test2)
-# print(test1.ledger)
-# print(test2.ledger)
+print(test1.ledger)
+print(test2.ledger)
 cat_list = [test1, test2]
 
 def create_spend_chart(cat_list):
+    # Get the totals of each category's withdrawals only
+    cat_totals_dict = {}
     for i in cat_list:
-        print(i.ledger)
+        cat_totals_dict.update({i.name : 0})
+        for j in i.ledger:
+            if j['amount'] < 0:
+                cat_totals_dict[i.name] += j['amount']
+                # print(i.name, j['amount'])
+    print(cat_totals_dict)
+    # Calculate their percentage of total spend rounded down to nearest 10%
+    total = 0
+    cat_total = 0
+    for i in cat_totals_dict:
+        total += cat_totals_dict[i]
+        cat_total += 1
+    print(total)
+    for i in cat_totals_dict:
+        cat_totals_dict[i] = math.floor(cat_totals_dict[i]/total*10)*10
+    print(cat_totals_dict)
+    # Design the print layout string
+    width = 3*(cat_total) + 1
+    
+
+
 print(create_spend_chart(cat_list))
-
-
