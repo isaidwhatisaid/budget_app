@@ -6,19 +6,28 @@ class Category:
         self.ledger = []
     
     def __str__(self):
+        rows = []
         # Design the category name row with the stars
         star_amount = round((30 - len(self.name))/2)
         self.title_row = '*'*star_amount + self.name + '*'*star_amount
         if len(self.title_row) == 29:
             self.title_row += '*'
-        print(self.title_row)
+        rows.append(self.title_row)
         # Parse and format each ledger row
         for i in self.ledger:
-            each_row = i['description'] + str(i['amount']).rjust(30-len(i['description']))
-            print(each_row)
+            # Display first 23 characters of the description
+            row_desc = i['description'][:23]
+            # Display the amount, right aligned and with 2 decimal places
+            "%0.2f" % 10
+            row_amt = str("%0.2f" % i['amount']).rjust(30-len(row_desc))
+            each_row = row_desc + row_amt
+            rows.append(each_row)
         # Use get_balance method to get the total
         total = "Total: " + str(self.get_balance())
-        return total
+        rows.append(total)
+        # Join the rows list to make a returnable string
+        display = '\n'.join(rows)
+        return display
 
     # Deposit method that appends description and amount to the ledger
     def deposit(self, amount, description = ''):
@@ -55,3 +64,24 @@ class Category:
             category.deposit(amount, "Transfer from " + self.name)
             return True
         else: return False
+
+
+
+ # Testers    
+test1 = Category('test1')
+test2 = Category('test2')
+test1.deposit(1.10, 'food')
+test1.deposit(93.54, 'anything else this string needs to be really long')
+test1.withdraw(4.00, 'minus')
+# print(test1.ledger)
+test1.transfer(4.25, test2)
+# print(test1.ledger)
+# print(test2.ledger)
+cat_list = [test1, test2]
+
+def create_spend_chart(cat_list):
+    for i in cat_list:
+        print(i.ledger)
+print(create_spend_chart(cat_list))
+
+
