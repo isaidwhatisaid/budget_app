@@ -105,7 +105,9 @@ def create_spend_chart(cat_list):
     print(cat_totals_dict)
     # Design the print layout string
     width = 3*(cat_total) + 1
-    
+    for i in range(100,-1,-10):
+        row = (str(i) + '|').rjust(4) + ' '*width
+        print(row)
 
 
 print(create_spend_chart(cat_list))
