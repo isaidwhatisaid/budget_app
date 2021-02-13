@@ -70,44 +70,75 @@ class Category:
 
 
  # Testers    
-test1 = Category('test1')
-test2 = Category('test2')
-test1.deposit(1.10, 'food')
-test1.deposit(93.54, 'anything else this string needs to be really long')
-test2.deposit(200, 'initial')
-test1.withdraw(4.00, 'minus')
-test2.withdraw(15.34, 'withdrawal')
-test2.withdraw(39, 'look')
-test1.transfer(4.25, test2)
-print(test1.ledger)
-print(test2.ledger)
-cat_list = [test1, test2]
+food = Category('Food')
+business = Category('Business')
+entertainment = Category("Entertainment")
+food.deposit(900, "deposit")
+entertainment.deposit(900, "deposit")
+business.deposit(900, "deposit")
+food.withdraw(105.55)
+entertainment.withdraw(33.40)
+business.withdraw(10.99)
+categories = [business, food, entertainment]
 
-def create_spend_chart(cat_list):
+
+
+def create_spend_chart(categories):
+
     # Get the totals of each category's withdrawals only
     cat_totals_dict = {}
-    for i in cat_list:
+    for i in categories:
         cat_totals_dict.update({i.name : 0})
         for j in i.ledger:
             if j['amount'] < 0:
                 cat_totals_dict[i.name] += j['amount']
-                # print(i.name, j['amount'])
-    print(cat_totals_dict)
-    # Calculate their percentage of total spend rounded down to nearest 10%
+                
+    # Calculate their percentage of total spend for each category
     total = 0
     cat_total = 0
     for i in cat_totals_dict:
         total += cat_totals_dict[i]
         cat_total += 1
-    print(total)
-    for i in cat_totals_dict:
-        cat_totals_dict[i] = math.floor(cat_totals_dict[i]/total*10)*10
-    print(cat_totals_dict)
+    
     # Design the print layout string
     width = 3*(cat_total) + 1
+    spaces = ' '*width
+    rows = []
     for i in range(100,-1,-10):
-        row = (str(i) + '|').rjust(4) + ' '*width
-        print(row)
+        rows.append((str(i) + '|').rjust(4) + spaces)
+    rows.append(' '*4 + '-'*(width))
 
+    # Add the length of the longest category name to the bottom of the chart
+    cat_lengths = []
+    for i in categories:
+        cat_lengths.append(len(i.name))
+    cat_length = max(cat_lengths)
+    for i in range(0,cat_length):
+        rows.append(' '*(width+4))
+        
+    # Round down to 10% and design the bars for each category
+    cat_bars = []
+    height = 11
+    for i in cat_totals_dict:
+        cat_totals_dict[i] = math.floor(cat_totals_dict[i]/total*10)*10
+        top = int(cat_totals_dict[i]/10) + 1
+        cat_bars.append(' '*(height-top) + top*'o' + '-' + i + ' '*(cat_length-len(i)))
+    
+    # Make all the rows into lists of individual characters so they're mutable
+    row_lists = []
+    for row in rows:
+        row_lists.append(list(row))
 
-print(create_spend_chart(cat_list))
+    # Loop through all the rows and add the content from the categories
+    total_height = len(rows)
+    spacing = list(range(5,25,3))
+    for i in range(total_height):
+        for j in range(len(categories)):
+            row_lists[i][spacing[j]] = cat_bars[j][i]
+
+    # Format the result to a single string
+    new_rows = []
+    for i in row_lists:
+        new_rows.append(''.join(i))
+    formatted = 'Percentage spent by category\n' + '\n'.join(new_rows)
+    return formatted
